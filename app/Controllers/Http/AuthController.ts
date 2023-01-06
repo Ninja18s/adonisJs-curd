@@ -14,10 +14,13 @@ export default class AuthController {
             expiresIn: "1 day"
         });
 
-        data.token = token.toJSON()
+
         return response.json({
 
-            data
+            data: {
+                ...data,
+                token
+            }
         });
 
     }
@@ -29,18 +32,16 @@ export default class AuthController {
         const token = await auth.use("api").attempt(payload.email, payload.password, {
             expiresIn: "10 days",
         });
-        let userDetails: any;
-        if (token) {
-            userDetails = await UsersService.getUserByEmail(payload.email)
-        }
+        const userDetails = await UsersService.getUserByEmail(payload.email)
 
-        userDetails = {
-            ...userDetails,
-            token: token.toJSON()
-        }
+
+
 
         return response.json({
-            data: userDetails
+            data: {
+                ...userDetails,
+                token
+            }
         });
 
 
