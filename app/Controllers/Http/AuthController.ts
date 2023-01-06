@@ -46,4 +46,15 @@ export default class AuthController {
 
 
     }
+
+    public async logoutUser({ auth, response }: HttpContextContract): Promise<any> {
+        // const temp = await auth.use('api').authenticate();
+
+        await auth.use('api').logout();
+
+        return response.json({
+            message: "successfully logged out",
+            data: null
+        })
+    }
 }
