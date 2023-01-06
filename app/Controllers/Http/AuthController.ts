@@ -7,46 +7,42 @@ import RegisterUserValidator from "App/Validators/RegisterUserValidator";
 export default class AuthController {
     public async registerUser({ auth, request, response }: HttpContextContract): Promise<any> {
 
-        try {
-            const payload = await request.validate(RegisterUserValidator);
-            const data = await UsersService.registerUser(payload)
-            const token = await auth.use('api').attempt(payload.email, payload.password, {
-                expiresIn: "1 day"
-            });
 
-            data.token = token.toJSON()
-            return response.json({
+        const payload = await request.validate(RegisterUserValidator);
+        const data = await UsersService.registerUser(payload)
+        const token = await auth.use('api').attempt(payload.email, payload.password, {
+            expiresIn: "1 day"
+        });
 
-                data: data
-            });
-        } catch (error) {
-            throw error;
-        }
+        data.token = token.toJSON()
+        return response.json({
+
+            data
+        });
+
     }
 
     public async loginUser({ auth, request, response }: HttpContextContract): Promise<any> {
-        try {
 
-            const payload = await request.validate(LoginValidator);
-            const token = await auth.use("api").attempt(payload.email, payload.password, {
-                expiresIn: "10 days",
-            });
-            let userDetails: any;
-            if (token) {
-                userDetails = await UsersService.getUserByEmail(payload.email)
-            }
 
-            userDetails = {
-                ...userDetails,
-                token: token.toJSON()
-            }
-
-            return response.json({
-                data: userDetails
-            });
-
-        } catch (error) {
-            throw error;
+        const payload = await request.validate(LoginValidator);
+        const token = await auth.use("api").attempt(payload.email, payload.password, {
+            expiresIn: "10 days",
+        });
+        let userDetails: any;
+        if (token) {
+            userDetails = await UsersService.getUserByEmail(payload.email)
         }
+
+        userDetails = {
+            ...userDetails,
+            token: token.toJSON()
+        }
+
+        return response.json({
+            data: userDetails
+        });
+
+
     }
 }
