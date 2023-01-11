@@ -19,7 +19,7 @@ export default class RegisterUserValidator {
    *    ```
    *     schema.string({}, [
    *       rules.email(),
-   *       rules.unique({ table: 'users', column: 'email' }),
+   *       rules.unique({ table: 'auths', column: 'email' }),
    *     ])
    *    ```
    */
@@ -36,22 +36,6 @@ export default class RegisterUserValidator {
       rules.minLength(8),
       rules.required(),
       rules.alphaNum()
-    ]),
-    name: schema.string({ trim: true }, [
-      rules.required(),
-      rules.maxLength(30),
-      rules.minLength(3),
-    ]),
-    mobile: schema.string({ trim: true }, [
-      rules.required(),
-      rules.mobile(),
-      rules.unique({ table: 'users', column: 'mobile' }),
-      rules.maxLength(10),
-      rules.minLength(10),
-    ]),
-    gender: schema.enum(['male', 'female']),
-    dob: schema.date({ format: 'yyyy-mm-dd' }, [
-      rules.required(),
     ])
   })
 

@@ -3,7 +3,9 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
 
-    Route.patch('/',
+    Route.put('/',
         'UsersController.editUserDetails');
-    Route.get('/:id', 'UsersController.getUserById')
+    Route.get('/', 'UsersController.getUserById')
+    Route.post('/', 'UsersController.createProfile')
+    Route.delete('/', 'UsersController.deleteProfile')
 }).prefix('user/profile').middleware('auth')

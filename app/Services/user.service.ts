@@ -1,28 +1,41 @@
-import User from "App/Models/Auth";
+import Profile from "App/Models/Profile";
 
 export default class UsersService {
 
     public static async editUser(userId: String, payload: any) {
+        let user = await Profile.findBy('userId', userId);
+        // if (user) {
 
-        const user = await User.findOrFail(userId);
+        //     user.name = payload.name ? payload.name : user.name;
+        //     user.mobile = payload.mobile ? payload.mobile : user.mobile;
+        //     user.gender = payload.gender ? payload.gender : user.gender;
+        //     user.dob = payload.dob ? payload.dob : user.dob;
+        //     user = await user.save();
+        // }
+        return await user?.merge(payload).save();
 
-        user.name = payload.name ? payload.name : user.name;
-        user.email = payload.email ? payload.email : user.email;
-        user.password = payload.password ? payload.password : user.password;
-        user.mobile = payload.mobile ? payload.mobile : user.mobile;
-        user.gender = payload.gender ? payload.gender : user.gender;
-        user.dob = payload.dob ? payload.dob : user.dob;
-        await user.save();
-        return user;
+
     }
     public static async getUserByEmail(email: string) {
-        const user = await User.findBy('email', email);
-        return user;
+        return await Profile.findBy('email', email);
     }
-    public static async getUserById(id: string) {
-        const user = await User.findBy('id', id);
-        return user;
+    public static async getUserById(userId: string) {
+        return await Profile.findBy('userId', userId);
+    }
+    public static async createProfile(userId: String, payload: any) {
+        const isUserExist = await Profile.findBy('userId', userId);
+        if (isUserExist) {
+            throw new Error(`User  already exists`);
+        }
+        return await Profile.create({ userId, ...payload });
+
+
     }
 
+    public static async deleteProfile(userId: String) {
+        const user = await Profile.findBy('userId', userId);
+        await user.delete();
+        return null;
+    }
     // public static async 
 }

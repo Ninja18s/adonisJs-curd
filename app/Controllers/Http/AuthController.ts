@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import AuthService from 'App/Services/auth.service';
 
 import UsersService from "App/Services/user.service";
 import LoginValidator from 'App/Validators/LoginValidator';
@@ -9,7 +10,7 @@ export default class AuthController {
 
 
         const payload = await request.validate(RegisterUserValidator);
-        const data = await UsersService.registerUser(payload)
+        const data = await AuthService.registerUser(payload)
         const token = await auth.use('api').attempt(payload.email, payload.password, {
             expiresIn: "1 day"
         });
@@ -17,10 +18,8 @@ export default class AuthController {
 
         return response.json({
 
-            data: {
-                ...data,
-                token
-            }
+            data,
+            token
         });
 
     }

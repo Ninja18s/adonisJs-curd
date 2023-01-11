@@ -1,7 +1,7 @@
 import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class EditUserValidator {
+export default class CreateProfileValidator {
   constructor(protected ctx: HttpContextContract) { }
 
   /*
@@ -24,23 +24,25 @@ export default class EditUserValidator {
    *    ```
    */
   public schema = schema.create({
-
-    name: schema.string.optional({ trim: true }, [
+    name: schema.string({ trim: true }, [
+      rules.required(),
       rules.maxLength(30),
       rules.minLength(3),
     ]),
-    mobile: schema.string.optional({ trim: true }, [
+    //  userId: schema.string(),
+    mobile: schema.string({ trim: true }, [
+      rules.required(),
       rules.mobile(),
       rules.unique({ table: 'profiles', column: 'mobile' }),
       rules.maxLength(10),
       rules.minLength(10),
     ]),
-
-
-    gender: schema.enum.optional(['male', 'female']),
-    dob: schema.date.optional({ format: 'yyyy-mm-dd' }, [
+    gender: schema.enum(['male', 'female']),
+    dob: schema.date({ format: 'yyyy-mm-dd' }, [
+      rules.required(),
     ])
   })
+
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
    * for targeting nested fields and array expressions `(*)` for targeting all
@@ -53,6 +55,7 @@ export default class EditUserValidator {
    *
    */
   public messages: CustomMessages = {
+    required: '{{ field }} is required to registeration',
     enum: 'The value of {{ field }} must be in {{ options.choices }}',
     unique: '{{ field }} must be unique',
     minLength: '{{ field }} must be at least {{ options.minLength}}',
@@ -60,5 +63,6 @@ export default class EditUserValidator {
     alphaNum: '{{ field }} must be contain only alpha Numeric characters',
     mobile: '{{ field }} must be contain only valid mobile number',
     notIn: '{{ field }} should not be contain with password'
+
   }
 }

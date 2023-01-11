@@ -9,4 +9,4 @@ Route.group(() => {
         'AuthController.loginUser')
     Route.post('/logout',
         'AuthController.logoutUser').middleware('auth')
-}).prefix('auth');
+})
