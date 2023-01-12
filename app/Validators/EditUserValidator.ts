@@ -1,25 +1,26 @@
 import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { GenderEnumType } from 'App/dto/base.dto'
 
-export default class RegisterUserValidator {
+export default class EditUserValidator {
   constructor(protected ctx: HttpContextContract) { }
   public schema = schema.create({
-    email: schema.string({ trim: true }, [
-      rules.email(),
-      rules.required(),
-      rules.unique({ table: 'users', column: 'email' }),
 
+    name: schema.string.optional({ trim: true }, [
+      rules.maxLength(30),
+      rules.minLength(3),
     ]),
-    password: schema.string({}, [
-      rules.notIn(['password']),
-      rules.maxLength(16),
-      rules.minLength(8),
-      rules.required(),
-      rules.alphaNum()
+    mobile: schema.string.optional({ trim: true }, [
+      rules.mobile(),
+      rules.unique({ table: 'profiles', column: 'mobile' }),
+      rules.maxLength(10),
+      rules.minLength(10),
+    ]),
+    gender: schema.enum.optional(GenderEnumType),
+    dob: schema.date.optional({ format: 'yyyy-mm-dd' }, [
     ])
   })
   public messages: CustomMessages = {
-    required: '{{ field }} is required to registeration',
     enum: 'The value of {{ field }} must be in {{ options.choices }}',
     unique: '{{ field }} must be unique',
     minLength: '{{ field }} must be at least {{ options.minLength}}',
