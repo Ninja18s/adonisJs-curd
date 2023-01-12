@@ -1,8 +1,7 @@
 import Profile from "App/Models/Profile";
 
-export default class UsersService {
-
-    public static async editUser(userId: String, payload: any) {
+export default class ProfileService {
+    public static async editUserProfile(userId: String, payload: any): Promise<any> {
         let user = await Profile.findBy('userId', userId);
         // if (user) {
 
@@ -13,29 +12,23 @@ export default class UsersService {
         //     user = await user.save();
         // }
         return await user?.merge(payload).save();
-
-
     }
-    public static async getUserByEmail(email: string) {
+    public static async getUserByEmail(email: string): Promise<any> {
         return await Profile.findBy('email', email);
     }
-    public static async getUserById(userId: string) {
+    public static async getUserProfileById(userId: string): Promise<any> {
         return await Profile.findBy('userId', userId);
     }
-    public static async createProfile(userId: String, payload: any) {
-        const isUserExist = await Profile.findBy('userId', userId);
-        if (isUserExist) {
-            throw new Error(`User  already exists`);
+    public static async createProfile(userId: String, payload: any): Promise<any> {
+        const isUserProfileExist = await Profile.findBy('userId', userId);
+        if (isUserProfileExist) {
+            throw new Error(`User profile already exists`);
         }
         return await Profile.create({ userId, ...payload });
-
-
     }
 
-    public static async deleteProfile(userId: String) {
+    public static async deleteProfile(userId: String): Promise<void> {
         const user = await Profile.findBy('userId', userId);
         await user.delete();
-        return null;
     }
-    // public static async 
 }
