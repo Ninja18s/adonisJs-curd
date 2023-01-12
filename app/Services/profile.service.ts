@@ -1,7 +1,8 @@
+import { ProfileDTO } from "App/dto/profile/profile.dto";
 import Profile from "App/Models/Profile";
 
 export default class ProfileService {
-    public static async editUserProfile(userId: String, payload: any): Promise<any> {
+    public static async editUserProfile(userId: String, payload: ProfileDTO): Promise<ProfileDTO> {
         let user = await Profile.findBy('userId', userId);
         // if (user) {
 
@@ -13,13 +14,13 @@ export default class ProfileService {
         // }
         return await user?.merge(payload).save();
     }
-    public static async getUserByEmail(email: string): Promise<any> {
+    public static async getUserByEmail(email: string): Promise<ProfileDTO> {
         return await Profile.findBy('email', email);
     }
-    public static async getUserProfileById(userId: string): Promise<any> {
+    public static async getUserProfileById(userId: string): Promise<ProfileDTO> {
         return await Profile.findBy('userId', userId);
     }
-    public static async createProfile(userId: String, payload: any): Promise<any> {
+    public static async createProfile(userId: String, payload: ProfileDTO): Promise<ProfileDTO> {
         const isUserProfileExist = await Profile.findBy('userId', userId);
         if (isUserProfileExist) {
             throw new Error(`User profile already exists`);

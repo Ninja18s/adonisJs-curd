@@ -1,5 +1,6 @@
 import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { GenderEnumType } from 'App/dto/base.dto'
 
 export default class CreateProfileValidator {
   constructor(protected ctx: HttpContextContract) { }
@@ -16,7 +17,7 @@ export default class CreateProfileValidator {
       rules.maxLength(10),
       rules.minLength(10),
     ]),
-    gender: schema.enum(['male', 'female']),
+    gender: schema.enum(GenderEnumType),
     dob: schema.date({ format: 'yyyy-mm-dd' }, [
       rules.required(),
     ])

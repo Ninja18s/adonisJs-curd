@@ -20,7 +20,7 @@ export default class Profile extends BaseModel {
 
   @hasOne(() => User, {
     foreignKey: 'id',
-    localKey: ' userId',
+    localKey: 'userId',
   })
   public user: HasOne<typeof User>
 
