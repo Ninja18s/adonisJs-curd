@@ -20,7 +20,8 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 import '../app/routes/http/UsersRoute'
+import '../app/routes/http/AuthRoute'
 
 Route.get('/', async () => {
-  return { hello: 'world' }
+  return { data: 'api is running' }
 })
