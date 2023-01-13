@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import { v4 as uuidv4 } from 'uuid'
-import Profile from './Profile'
+
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: string
@@ -13,17 +13,23 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
+  @column({ meta: { type: 'enum', enum: ['male', 'female'] } })
+  public gender: string
+
+  @column()
+  name: string
+
+  @column({ meta: { unique: true } })
+  mobile: string
+
+  @column()
+  dob: DateTime
+
   @column()
   remember_me_token: string
 
   @column()
   public rememberMeToken: string | null
-
-  @hasOne(() => Profile, {
-    foreignKey: 'userId',
-    localKey: 'id',
-  })
-  public profile: HasOne<typeof Profile>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -32,10 +38,14 @@ export default class User extends BaseModel {
   public updatedAt: DateTime
 
   @beforeSave()
-  public static async hashPassword(user: User) {
-    user.id = await uuidv4()
-    if (user.$dirty.password) {
-      user.password = await Hash.make(user.password)
+  public static async hashPassword(auth: User) {
+
+    if (auth.$dirty.password) {
+      auth.password = await Hash.make(auth.password)
     }
+  }
+  @beforeSave()
+  public static async idGenerator(auth: User) {
+    auth.id = await uuidv4()
   }
 }
