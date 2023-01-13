@@ -1,10 +1,12 @@
 import { DateTime } from "luxon";
+import { UserDTO } from "../Auth/auth.dto";
 import { BaseDto, GenderEnum } from "../base.dto";
 
 export class ProfileDTO extends BaseDto {
-    gender?: GenderEnum | undefined;
-    mobile?: string | undefined;
-    dob?: DateTime | undefined;
-    name?: string | undefined;
-    user_id?: string | undefined;
+    gender?: GenderEnum;
+    mobile?: string;
+    dob?: DateTime;
+    name?: string;
+    user_id?: string;
+    user: UserDTO
 }

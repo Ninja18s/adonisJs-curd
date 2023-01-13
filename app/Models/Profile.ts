@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, beforeSave, column, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import { v4 as uuidv4 } from 'uuid'
 import User from './User'
 export default class Profile extends BaseModel {
@@ -18,11 +18,8 @@ export default class Profile extends BaseModel {
   @column()
   userId: string
 
-  @hasOne(() => User, {
-    foreignKey: 'id',
-    localKey: 'userId',
-  })
-  public user: HasOne<typeof User>
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @column()
   public dob: DateTime
