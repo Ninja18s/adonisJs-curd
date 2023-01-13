@@ -1,23 +1,17 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'users'
+  protected tableName = 'profiles'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary().unique()
-      table.string('email').unique()
-      table.string('password', 180)
       table.string('gender')
       table.string('mobile').unique()
       table.date('dob')
-      table.string('remember_me_token').nullable()
-      table.string('name')
+      table.string('name').notNullable()
+      table.uuid('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
 
-
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
@@ -26,4 +20,5 @@ export default class extends BaseSchema {
   public async down() {
     this.schema.dropTable(this.tableName)
   }
+
 }
