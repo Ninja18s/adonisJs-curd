@@ -10,7 +10,3 @@ export enum GenderEnum {
     MALE = 'male',
     FEMALE = 'female'
 }
-export const GenderEnumType = [
-    'male',
-    'female'
-]
